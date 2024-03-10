@@ -4,6 +4,9 @@
 
 #### VARIABLES ####
 
+set $suspend systemctl suspend
+
+set $notify dunst
 
 set $term alacritty
 
@@ -42,12 +45,18 @@ client.placeholder          #d8dee8 #d8dee8 #d8dee8 #d8dee8   #d8dee8
 ### COLOR ###
 
 ### IDLE ####
- exec swayidle -w \
-          timeout 300 'swaylock -f -c 000000' \
-          timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
-          before-sleep 'swaylock -f -c 000000'
+#exec swayidle -w \
+# timeout 10800 'swaylock -f -c 000000' \
+# timeout 10800'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
+# before-sleep 'swaylock -f -c 000000'
 
 ### IDLE ####
+
+### notify ###
+
+exec $notify
+
+### notify ###
 
 ##################
 #### KEYBINDS ####
@@ -60,6 +69,18 @@ bindsym $mod+Return exec $term
 bindsym $mod+q kill
 
 bindsym $mod+r exec $launcher
+
+bindsym $mod+Shift+o exec $suspend
+
+### VOLUME ###
+
+#bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
+
+#bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
+
+#bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
+
+### VOLUME ###
 
 ### MOVING ####
 
@@ -127,7 +148,33 @@ bindsym $mod+w layout tabbed
 
 bindsym $mod+e layout toggle split
 ### LAYOUT###
+bindsym $mod+i exec --no-startup-id brightnessctl s 5%+
+bindsym $mod+o exec --no-startup-id brightnessctl s 5%-
 
 ##################
 #### KEYBINDS ####
 ##################
+
+### MONITORS ###
+include ~/.config/sway/outputs
+### MONITORS ###
+
+## RESIZING ###
+mode "resize" {
+bindsym Left resize shrink width 30px
+bindsym Down resize grow height 30px
+bindsym Up resize shrink height 30px
+bindsym Right resize grow width 30px
+
+# Return to default mode
+bindsym Return mode "default"
+bindsym Escape mode "default"
+}
+bindsym $mod+p mode "resize"
+
+
+
+
+########################
+####  SWAY CONFIG   ####
+########################
